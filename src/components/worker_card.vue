@@ -1,5 +1,9 @@
 <template>
-    $END$
+<div class="card">
+    <img src="" alt="">
+    <h5></h5>
+    <p></p>
+</div>
 </template>
 
 <script>

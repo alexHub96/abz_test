@@ -1,10 +1,26 @@
 const PurgecssPlugin = require('purgecss-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-const ImageminPlugin = require('imagemin-webpack-plugin');
 const glob = require('glob-all');
 const path = require('path');
 
+var ImageminPlugin = require('imagemin-webpack-plugin').default;
+
 module.exports = {
+
+    pluginOptions: {
+        svgSprite: {
+            dir: 'src/assets/icons',
+            test: /\.(svg)(\?.*)?$/,
+
+            loaderOptions: {
+                extract: true,
+                spriteFilename: 'img/icons.[hash:8].svg' // or 'img/icons.svg' if filenameHashing == false
+            },
+            pluginOptions: {
+                plainSprite: true
+            }
+        }
+    },
 
     configureWebpack: (config) => {
         if (process.env.NODE_ENV === 'production') {
@@ -18,12 +34,9 @@ module.exports = {
                 new UglifyJsPlugin({
                     test: /\.js(\?.*)?$/i
                 }),
-                new ImageminPlugin({
-                    disable: process.env.NODE_ENV !== 'production', // Disable during development
-                    pngquant: {
-                        quality: '95-100'
-                    }
-                })
+
+                // new ImageminPlugin({ test: /\.(jpe?g|png|gif|svg)$/i })
+                new ImageminPlugin({ test: /\.(jpe?g|png|gif)$/i })
             )
         }
     },
